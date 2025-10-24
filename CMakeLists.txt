@@ -8,7 +8,11 @@ list(APPEND srcs ${CELT_SOURCES}
 	${SILK_SOURCES_FIXED})
 
 set(PRIV_INCLUDES "celt/" "silk/" "silk/fixed" "src/")
-
+# Automatically suppress warnings treated as errors in ESP32 builds
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-Wno-error=maybe-uninitialized)
+    add_compile_options(-Wno-error=stringop-overread)
+endif()
 idf_component_register(SRCS ${srcs}
                        INCLUDE_DIRS "include"
                        PRIV_INCLUDE_DIRS ${PRIV_INCLUDES})
